@@ -1,6 +1,20 @@
 
 {{> header}}
 
-{{#each equipos}}
-<p>{{id}} The name is {{name}} and the shortname :{{shortName}} area:{{area.name}} </p>
-{{/each }}
+   <script type="text/x-handlebars-template" id="tableTemplate"></script>
+   {{#if equipos}}
+
+        <table>
+            {{#each equipos}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{shortName}}</td>
+                    <td>{{area.name}}</td>
+                    <td><a href="/delete/{{id}}"> DELETE</a></td>
+                     <td><a href="/team/{{id}}"> Ver</a></td>
+                </tr>
+            {{/each}}
+        </table>
+    {{else}}
+        <h3>No teams found!</h3>
+    {{/if}}
