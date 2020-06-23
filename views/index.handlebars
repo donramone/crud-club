@@ -2,21 +2,21 @@
 {{> header}}
 
    <script type="text/x-handlebars-template" id="tableTemplate"></script>
-   <a href="/create">Agregar</a>
+   <a style="text-decoration:none" href="/create"><b>Agregar</b></a>
    {{#if equipos}}
 
         <table>
             {{#each equipos}}
                 <tr>
-                   <!-- <td>{{id}}</td> -->
+                    <td><img src={{crestUrl}} alt="" height=20></img></td>
                     <td>{{tla}}</td>
                     <td>{{shortName}}</td>
                     <td>{{area.name}}</td>
-                    <td><a href="/delete/{{id}}">Eliminar</a></td>
-                    <td><a href="/team/{{id}}"> Ver</a></td>
+                    <td><a style="text-decoration:none" href="/delete/{{id}}" onclick="return confirm('Eliminar a {{shortName}}?')">Eliminar</a></td>
+                    <td><a style="text-decoration:none" href="/team/{{id}}"> Ver</a></td>
                 </tr>
             {{/each}}
         </table>
     {{else}}
-        <h3>No teams found!</h3>
+        <h3>No se encontraron euipos en la base de datos</h3>
     {{/if}}

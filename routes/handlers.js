@@ -1,14 +1,14 @@
+
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
 const storage =  {
-    dest: './data/img'
+    dest: './uploads/imagenes'
 }
 const upload = multer(storage);
-const { v4: uuidv4 } = require('uuid');
 
-router.use(express.static(`${__dirname}/data`));
 // Obtengo error si no declaro este urlencode
 router.use(express.urlencoded({ extended: false }));
 
@@ -21,54 +21,22 @@ router.get('/', (req, res) => {
 });
 
 router.post('/edit/:id', upload.single('imagen'), (req, res) => {
-    
-    console.log("imagen : " + req.file);
     const {tla, name, shortname} = req.body;
-    const idEditar = req.params.id;
-    //console.log('image ' + crestUrl);
-    
-    //clubs
+    const pais = req.body['area.name'];
     const equipos_json = JSON.parse(fs.readFileSync('./data/equipos.json'));
     //clubIndex 
-    const selectedObject = equipos_json.find((equipo) => equipo.id == idEditar);
-    
+    const selectedObject = equipos_json.find((equipo) => equipo.id == req.params.id);
+
+
     selectedObject.tla = tla;
     selectedObject.name = name ;
     selectedObject.shortName = shortname;
+    selectedObject.area.name = pais;
+    selectedObject.crestUrl = req.file.filename;
 
 
    console.log("equipo Modificado: " , selectedObject); 
    res.redirect('/');
-   //equipos_json[idEditar] = selectedObject;
-
-   // fs.writeFileSync('data/equipos.db.json', JSON.stringify(equipos_json), 'utf-8');
-    /*
-
-    res.send('testing if method post works');
-
-
-    fs.writeFileSync('data/equipos.db.json', JSON.stringify(equipos_json), 'utf-8');
-
-
-    fs.writeFile('data/equipos.db.json', JSON.stringify(clubs), (err) => {
-        if (err) throw err;
-      });
-      res.redirect('/');
-
-    /**
-      const { id } = req.body;
-      const clubs = helpers.getClubs();
-      const clubIndex = clubs.findIndex(({ id: clubId }) => clubId.toString() === id);
-    const editedClub = helpers.editClub(req.body, req.file, clubs[clubIndex]);
-    clubs[clubIndex] = editedClub;
-
-    fs.writeFile('data/equipos.db.json', JSON.stringify(clubs), (err) => {
-    if (err) throw err;
-    });
-    res.redirect('/');
-    });
-    */
-
 });
 
 router.get('/team/:id', (req, res) => {
@@ -86,10 +54,17 @@ router.get('/create', (req, res) => {
     res.render('create');
 });
 
-router.post('/create', (req, res) => {
-    const {tla, name, shortName} = req.body;
+router.post('/create', upload.single('image'), (req, res) => {
+    console.log(req.file);
+    //CONTROLAR SI VIENE LA IMAGEN VACIA DA ERROR!!!
+    //console.log("imagen stringl : " + JSON.stringify( req.file.filename ) );
+    const {tla, name, shortName } = req.body;
+    // No puedo solucionar pasar el parametro del pais en la linea de arriba
+    const pais = req.body['area.name'];
+
+
     const equipos = JSON.parse(fs.readFileSync('./data/equipos.json'));
-    
+    // la validacion de errores no deberia estar acá
     if(!tla || !shortName){
         res.status(400).send("Datos incompletos");
          return;
@@ -99,27 +74,29 @@ router.post('/create', (req, res) => {
         id: uuidv4(),
         tla,
         name,
-        shortName
+        shortName,
+        area: {
+            name: pais
+        },
+        // + '.jpg'
+        crestUrl: req.file.filename
     };
 
     console.log('el nuevo team es ' + JSON.stringify(newTeam));
     equipos.push(newTeam);
     console.log('eqyupos ' + JSON.stringify(equipos));
     fs.writeFileSync('data/equipos.json', JSON.stringify(equipos), 'utf-8');
-    //res.send("datos recibidos" + JSON.stringify(equipos));
     res.redirect('/');
        
 
 });
 
 router.get('/delete/:id', (req, res) => {
-    
-    const idEliminar = req.params.id;
-    const equipos_json = JSON.parse(fs.readFileSync('./data/equipos.json'));
-    // here error con !==
-    const e = equipos_json.filter(equipo => equipo.id != idEliminar);
 
-    fs.writeFileSync('./data/equipos.json', JSON.stringify(e))
+    const equipos_json = JSON.parse(fs.readFileSync('./data/equipos.json'));
+    // Error cuando castea !==
+    const equipo = equipos_json.filter(equipo => equipo.id != req.params.id);
+    fs.writeFileSync('./data/equipos.json', JSON.stringify(equipo))
     res.redirect('/');
     
 });

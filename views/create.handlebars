@@ -4,21 +4,24 @@
 
 <img src={{equipo.crestUrl}} width="75" height="75" />
 
-<form method="POST" action="/create">
+<form method="POST" action="/create" enctype="multipart/form-data">
     <label for="imagen">Imagen:</label>
-    <input type="file" name="imagen" id="imagen">
+    <input type="file" name="image">
     <br>
     <label for="tla">TLA:</label>
     <input type="text" name="tla" maxlength="3" placeholder="Max de 3 caracteres">
     <br>
+    <label for="shortName">Nombre corto: </label>
+    <input type="text" name="shortName" >
+    <br>
     <label for="nombre">Nombre: </label>
     <input type="text" name="name" id="nombre" required>
     <br>
-    <label for="shortName">Nombre corto: </label>
-    <input type="text" name="shortName" >
-  
-  <div>
-    <button type="submit" name="guardar">Guardar</button>
-    <a href="/">Volver</a>
-  </div>
+    <label for="area.name">País: </label>
+    <input type="text" name="area.name" >
+    
+    <div>
+      <button type="submit" name="guardar">Guardar</button>
+      <a href="/">Volver</a>
+    </div>
 </form>

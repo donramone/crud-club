@@ -1,20 +1,24 @@
 {{> header}}
 
 {{#if equipo}}
-<img src={{equipo.crestUrl}} width="75" height="75" />
-
+<img src={{equipo.crestUrl}} width="75" height="75" /> 
+<!---<img src="/imagenes/{{equipo.crestUrl}}.jpg" /> -->
 <form method="POST" action="/edit/{{equipo.id}}" enctype="multipart/form-data">
+    
     <label for="imagen">Imagen:</label>
     <input type="file" name="imagen" id="imagen">
     <label><h3>TLA: <input type="text" name="tla" value="{{equipo.tla}}" maxlength="3" placeholder="Maximo de 3 caracteres"></h3></label>
-    <label><h3>Nombre: <input type="text" name="name" value="{{equipo.name}}"></h3></label>
     <label><h3>Nombre corto: <input type="text" name="shortname" value="{{equipo.shortName}}"></h3></label>
+    <label><h3>Nombre: <input type="text" name="name" value="{{equipo.name}}"></h3></label>
+    <label><h3>País: <input type="text" name="area.name" value="{{equipo.area.name}}"></h3></label>
+  
   <div>
     <button type="submit" name="guardar">Guardar</button>
     <a href="/">Volver</a>
   </div>
+
 </form>
 
 {{else}}
-        <h3>No team found!</h3>
+        <h3>No se encontraron euipos en la base de datos</h3>
 {{/if}}
