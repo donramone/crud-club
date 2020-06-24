@@ -12,10 +12,13 @@ const upload = multer(storage);
 // Obtengo error si no declaro este urlencode
 router.use(express.urlencoded({ extended: false }));
 
+function traerDatosEquipos(){
+    return JSON.parse(fs.readFileSync('./data/equipos.json'))
+}
+
 router.get('/', (req, res) => {
     res.render('index',{
-       equipos: JSON.parse(fs.readFileSync('./data/equipos.json'))
-       
+      equipos: traerDatosEquipos()
     });
 
 });
@@ -23,29 +26,33 @@ router.get('/', (req, res) => {
 router.post('/edit/:id', upload.single('imagen'), (req, res) => {
     const {tla, name, shortname} = req.body;
     const pais = req.body['area.name'];
-    const equipos_json = JSON.parse(fs.readFileSync('./data/equipos.json'));
-    //clubIndex 
-    const selectedObject = equipos_json.find((equipo) => equipo.id == req.params.id);
+    const equipos = traerDatosEquipos();
+ 
+    const equipoSeleccionado = equipos.find((equipo) => equipo.id == req.params.id);
+    const index = equipos.findIndex((equipo) => equipo.id == req.params.id);
+    
+    console.log("el index es_:" + index);
 
+    equipoSeleccionado.tla = tla;
+    equipoSeleccionado.name = name ;
+    equipoSeleccionado.shortName = shortname;
+    equipoSeleccionado.area.name = pais;
+    // equipoSeleccionadoObj.crestUrl = req.file.filename;
 
-    selectedObject.tla = tla;
-    selectedObject.name = name ;
-    selectedObject.shortName = shortname;
-    selectedObject.area.name = pais;
-    selectedObject.crestUrl = req.file.filename;
-
-
-   console.log("equipo Modificado: " , selectedObject); 
-   res.redirect('/');
+    equipos.splice(index, 1, equipoSeleccionado);
+    //console.log("equipo Modificado: " , selectedObject); 
+    console.log("todos los equipos: " , equipos); 
+    fs.writeFileSync('data/equipos.json', JSON.stringify(equipos), 'utf-8');
+    res.redirect('/');
 });
 
 router.get('/team/:id', (req, res) => {
  
-    const equipos_json = JSON.parse(fs.readFileSync('./data/equipos.json'));
-    const selectedEquipo = equipos_json.find((equipo) => equipo.id == req.params.id);
+    const equipos = traerDatosEquipos();
+    const equipoSeleccionado = equipos.find((equipo) => equipo.id == req.params.id);
 
     res.render('team',{
-        equipo : selectedEquipo
+        equipo : equipoSeleccionado
     });
 
 });
@@ -55,15 +62,13 @@ router.get('/create', (req, res) => {
 });
 
 router.post('/create', upload.single('image'), (req, res) => {
-    console.log(req.file);
     //CONTROLAR SI VIENE LA IMAGEN VACIA DA ERROR!!!
-    //console.log("imagen stringl : " + JSON.stringify( req.file.filename ) );
     const {tla, name, shortName } = req.body;
     // No puedo solucionar pasar el parametro del pais en la linea de arriba
     const pais = req.body['area.name'];
 
 
-    const equipos = JSON.parse(fs.readFileSync('./data/equipos.json'));
+    const equipos = traerDatosEquipos();
     // la validacion de errores no deberia estar acá
     if(!tla || !shortName){
         res.status(400).send("Datos incompletos");
@@ -78,7 +83,7 @@ router.post('/create', upload.single('image'), (req, res) => {
         area: {
             name: pais
         },
-        // + '.jpg'
+        // + '.jpg' El navegador deberia poder mostrar sin la extension 
         crestUrl: req.file.filename
     };
 
@@ -93,10 +98,10 @@ router.post('/create', upload.single('image'), (req, res) => {
 
 router.get('/delete/:id', (req, res) => {
 
-    const equipos_json = JSON.parse(fs.readFileSync('./data/equipos.json'));
+    const equipos = traerDatosEquipos();
     // Error cuando castea !==
-    const equipo = equipos_json.filter(equipo => equipo.id != req.params.id);
-    fs.writeFileSync('./data/equipos.json', JSON.stringify(equipo))
+    const equiposActualizados = equipos.filter(equipo => equipo.id != req.params.id);
+    fs.writeFileSync('./data/equipos.json', JSON.stringify(equiposActualizados))
     res.redirect('/');
     
 });
