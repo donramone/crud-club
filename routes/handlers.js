@@ -13,7 +13,15 @@ const upload = multer(storage);
 router.use(express.urlencoded({ extended: false }));
 
 function traerDatosEquipos(){
-    return JSON.parse(fs.readFileSync('./data/equipos.json'))
+    try {
+        return JSON.parse(fs.readFileSync('./data/equipos.json'))
+      } catch (err) {
+        if (err.code === 'ENOENT') {
+            console.log('No se encontró el archivo equipos.json!');
+          } else {
+            throw err;
+          }
+      }
 }
 
 router.get('/', (req, res) => {
@@ -31,17 +39,14 @@ router.post('/edit/:id', upload.single('imagen'), (req, res) => {
     const equipoSeleccionado = equipos.find((equipo) => equipo.id == req.params.id);
     const index = equipos.findIndex((equipo) => equipo.id == req.params.id);
     
-    console.log("el index es_:" + index);
-
     equipoSeleccionado.tla = tla;
     equipoSeleccionado.name = name ;
     equipoSeleccionado.shortName = shortname;
     equipoSeleccionado.area.name = pais;
-    // equipoSeleccionadoObj.crestUrl = req.file.filename;
-
+    equipoSeleccionado.crestUrl = `/imagenes/${req.file.filename}`,
+    
     equipos.splice(index, 1, equipoSeleccionado);
-    //console.log("equipo Modificado: " , selectedObject); 
-    console.log("todos los equipos: " , equipos); 
+     
     fs.writeFileSync('data/equipos.json', JSON.stringify(equipos), 'utf-8');
     res.redirect('/');
 });
@@ -66,10 +71,9 @@ router.post('/create', upload.single('image'), (req, res) => {
     const {tla, name, shortName } = req.body;
     // No puedo solucionar pasar el parametro del pais en la linea de arriba
     const pais = req.body['area.name'];
-
-
     const equipos = traerDatosEquipos();
     // la validacion de errores no deberia estar acá
+
     if(!tla || !shortName){
         res.status(400).send("Datos incompletos");
          return;
@@ -83,8 +87,7 @@ router.post('/create', upload.single('image'), (req, res) => {
         area: {
             name: pais
         },
-        // + '.jpg' El navegador deberia poder mostrar sin la extension 
-        crestUrl: req.file.filename
+        crestUrl: `/imagenes/${req.file.filename}`
     };
 
     console.log('el nuevo team es ' + JSON.stringify(newTeam));
@@ -93,7 +96,6 @@ router.post('/create', upload.single('image'), (req, res) => {
     fs.writeFileSync('data/equipos.json', JSON.stringify(equipos), 'utf-8');
     res.redirect('/');
        
-
 });
 
 router.get('/delete/:id', (req, res) => {
