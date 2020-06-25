@@ -1,15 +1,16 @@
 {{> header}}
 
 {{#if equipo}}
+
 <img src={{equipo.crestUrl}} width="75" height="75" /> 
-<!---<img src="/imagenes/{{equipo.crestUrl}}.jpg" /> -->
 <form method="POST" action="/edit/{{equipo.id}}" enctype="multipart/form-data">
     
     <label for="imagen">Imagen:</label>
     <input type="file" name="imagen" id="imagen">
     <label><h3>TLA: <input type="text" name="tla" value="{{equipo.tla}}" maxlength="3" placeholder="Maximo de 3 caracteres"></h3></label>
-    <label><h3>Nombre corto: <input type="text" name="shortname" value="{{equipo.shortName}}"></h3></label>
+    <label><h3>Nombre Abreviado: <input type="text" name="shortName" value="{{equipo.shortName}}"></h3></label>
     <label><h3>Nombre: <input type="text" name="name" value="{{equipo.name}}"></h3></label>
+    <label><h3>Direccion: <input type="text" name="address" value="{{equipo.address}}"></h3></label>
     <label><h3>País: <input type="text" name="area.name" value="{{equipo.area.name}}"></h3></label>
   
   <div>

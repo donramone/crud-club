@@ -14,7 +14,7 @@ router.use(express.urlencoded({ extended: false }));
 
 function traerDatosEquipos(){
     try {
-        return JSON.parse(fs.readFileSync('./data/equipos.json'))
+        return JSON.parse(fs.readFileSync('./data/equipos.db.json'))
       } catch (err) {
         if (err.code === 'ENOENT') {
             console.log('No se encontró el archivo equipos.json!');
@@ -24,6 +24,8 @@ function traerDatosEquipos(){
       }
 }
 
+// tambien escribir una función para guardar el JSON
+// Crear una entidad para manejar el Edit y Create
 router.get('/', (req, res) => {
     res.render('index',{
       equipos: traerDatosEquipos()
@@ -32,22 +34,25 @@ router.get('/', (req, res) => {
 });
 
 router.post('/edit/:id', upload.single('imagen'), (req, res) => {
-    const {tla, name, shortname} = req.body;
+    const {tla, name, shortName, address} = req.body;
     const pais = req.body['area.name'];
-    const equipos = traerDatosEquipos();
- 
-    const equipoSeleccionado = equipos.find((equipo) => equipo.id == req.params.id);
-    const index = equipos.findIndex((equipo) => equipo.id == req.params.id);
     
+    const equipos = traerDatosEquipos();
+    const equipoSeleccionado = equipos.find((equipo) => equipo.id == req.params.id);
+
     equipoSeleccionado.tla = tla;
     equipoSeleccionado.name = name ;
-    equipoSeleccionado.shortName = shortname;
+    equipoSeleccionado.shortName = shortName;
     equipoSeleccionado.area.name = pais;
-    equipoSeleccionado.crestUrl = `/imagenes/${req.file.filename}`,
-    
+    equipoSeleccionado.address = address;
+    if(req.file){
+        equipoSeleccionado.crestUrl = `/imagenes/${req.file.filename}`;
+    }
+
+    const index = equipos.findIndex((equipo) => equipo.id == req.params.id);
     equipos.splice(index, 1, equipoSeleccionado);
      
-    fs.writeFileSync('data/equipos.json', JSON.stringify(equipos), 'utf-8');
+    fs.writeFileSync('data/equipos.db.json', JSON.stringify(equipos), 'utf-8');
     res.redirect('/');
 });
 
@@ -67,14 +72,20 @@ router.get('/create', (req, res) => {
 });
 
 router.post('/create', upload.single('image'), (req, res) => {
-    //CONTROLAR SI VIENE LA IMAGEN VACIA DA ERROR!!!
-    const {tla, name, shortName } = req.body;
+
+    const {tla, name, shortName, address } = req.body;
     // No puedo solucionar pasar el parametro del pais en la linea de arriba
     const pais = req.body['area.name'];
     const equipos = traerDatosEquipos();
-    // la validacion de errores no deberia estar acá
-
-    if(!tla || !shortName){
+   
+    let img = '/imagenes/noImage.png';
+    
+    if (req.file != undefined){
+        img =  `/imagenes/${req.file.filename} `;
+    }
+    
+     // la validacion de errores no deberia estar acá
+    if(!tla || !name){
         res.status(400).send("Datos incompletos");
          return;
     }
@@ -87,13 +98,12 @@ router.post('/create', upload.single('image'), (req, res) => {
         area: {
             name: pais
         },
-        crestUrl: `/imagenes/${req.file.filename}`
+        address,
+        crestUrl: img
     };
 
-    console.log('el nuevo team es ' + JSON.stringify(newTeam));
     equipos.push(newTeam);
-    console.log('eqyupos ' + JSON.stringify(equipos));
-    fs.writeFileSync('data/equipos.json', JSON.stringify(equipos), 'utf-8');
+    fs.writeFileSync('data/equipos.db.json', JSON.stringify(equipos), 'utf-8');
     res.redirect('/');
        
 });
@@ -103,7 +113,7 @@ router.get('/delete/:id', (req, res) => {
     const equipos = traerDatosEquipos();
     // Error cuando castea !==
     const equiposActualizados = equipos.filter(equipo => equipo.id != req.params.id);
-    fs.writeFileSync('./data/equipos.json', JSON.stringify(equiposActualizados))
+    fs.writeFileSync('./data/equipos.db.json', JSON.stringify(equiposActualizados))
     res.redirect('/');
     
 });
