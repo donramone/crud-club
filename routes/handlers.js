@@ -83,8 +83,7 @@ router.post('/create', upload.single('image'), (req, res) => {
     if (req.file != undefined){
         img =  `/imagenes/${req.file.filename} `;
     }
-    
-     // la validacion de errores no deberia estar acá
+    // la validacion de errores no deberia estar acá
     if(!tla || !name){
         res.status(400).send("Datos incompletos");
          return;
