@@ -1,0 +1,22 @@
+
+{{> header}}
+
+   <script type="text/x-handlebars-template" id="tableTemplate"></script>
+   <a style="text-decoration:none" href="/form"><b>Agregar</b></a>
+   {{#if equipos}}
+
+        <table>
+            {{#each equipos}}
+                <tr>
+                    <td><img src={{escudoUrl}} alt="" height=20></img></td>
+                    <td>{{siglas}}</td>
+                    <td>{{nombreBreve}}</td>
+                    <td>{{area.name}}</td>
+                    <td><a style="text-decoration:none" href="/delete/{{id}}" onclick="return confirm('Eliminar a {{nombreBreve}}?')">Eliminar</a></td>
+                    <td><a style="text-decoration:none" href="/form/{{id}}"> Ver</a></td>
+                </tr>
+            {{/each}}
+        </table>
+    {{else}}
+        <h3>No se encontraron euipos en la base de datos</h3>
+    {{/if}}
