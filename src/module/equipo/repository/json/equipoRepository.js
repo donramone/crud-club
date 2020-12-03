@@ -17,6 +17,7 @@ module.exports = class EquipoRepository {
     const equipo = listaEquipos.find((equipoTmp) => equipoTmp.id == id);
     if (!equipo) {
       console.log(`No se encontró equipo con id ${id} `);
+      return false;
     }
     return EquipoMapper.fromJsonToEntity(equipo);
   }
@@ -41,7 +42,8 @@ module.exports = class EquipoRepository {
     const listaEquipos = await this.getData();
     const equipoIndex = listaEquipos.findIndex((tmpClub) => tmpClub.id == equipo.id);
     if (equipoIndex === -1) {
-      console.log("No se puede actualizar el equipo ");
+      console.log('No se puede actualizar el equipo. no existe ID');
+      return false;
     }
     // TODO: Si estoy intentando actualizar un equipo sin escudo da error
     const oldClub = listaEquipos[equipoIndex];
@@ -61,13 +63,18 @@ module.exports = class EquipoRepository {
 
   async delete(equipo) {
     const listaEquipos = this.getData();
-    const clubIndex = listaEquipos.findIndex((tmpClub) => tmpClub.id === equipo.id);
-    listaEquipos.splice(clubIndex, 1);
+    const equipoIndex = listaEquipos.findIndex((tmpClub) => tmpClub.id == equipo.id);
+    if (equipoIndex == -1) {
+      console.log('No se puede Eliminar el equipo. no existe ID');
+      return false;
+    }
+    listaEquipos.splice(equipoIndex, 1);
     this.saveData(listaEquipos);
     return true;
   }
 
   saveData(content) {
+    // console.log(content);
     const ruta = dirPath + 'equipos.db.json'
     fs.writeFileSync(ruta, JSON.stringify(content));
   }

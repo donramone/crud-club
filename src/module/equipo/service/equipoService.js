@@ -8,7 +8,7 @@ module.exports = class Service {
    * @param {Equipo} Equipo
    */
   async save(equipo) {
-   /*  if (equipo === undefined) {
+    /*  if (equipo === undefined) {
       throw new ClubNotDefinedError();
     } */
     return await equipoRepository.save(equipo);
@@ -17,7 +17,7 @@ module.exports = class Service {
   /**
    * @param {Equipo} Equipo
    */
-/*   async delete(equipo) {
+  /*   async delete(equipo) {
       console.log("delete en Service");
     return this.clubRepository.delete(equipo);
   } */
@@ -37,12 +37,12 @@ module.exports = class Service {
     const equipos = await equipoRepository.getAll();
     return equipos;
   }
+
   async delete(equipo) {
-    console.log("Delete equipo reposi")
     if (!(equipo instanceof Equipo)) {
-     // throw new ClubNotDefinedError();
-     console.log("ClubNotDefinedError en service");
-     return;
+      // throw new ClubNotDefinedError();
+      console.log("ClubNotDefinedError en service");
+      return;
     }
     return await equipoRepository.delete(equipo);
   }
