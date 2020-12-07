@@ -11,7 +11,7 @@ const storage = {
 const upload = multer(storage);
 const equipoService = new EquipoService();
 
-// Obtengo error si no declaro este urlencode
+// Obtengo error si no declaro este urlencode. sirve para subir archivos JPG
 router.use(express.urlencoded({ extended: false }));
 
 router.get('/', (req, res) => {

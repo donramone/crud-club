@@ -1,4 +1,3 @@
-
 class Equipo {
   constructor({
     id,

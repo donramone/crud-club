@@ -1,49 +1,43 @@
 const EquipoRepository = require('../repository/json/equipoRepository');
 const Equipo = require('../entity/Equipo');
 
-equipoRepository = new EquipoRepository();
 module.exports = class Service {
-
-  /**
-   * @param {Equipo} Equipo
-   */
-  async save(equipo) {
-    /*  if (equipo === undefined) {
-      throw new ClubNotDefinedError();
-    } */
-    return await equipoRepository.save(equipo);
+  constructor() {
+    this.repository = new EquipoRepository();
   }
 
   /**
-   * @param {Equipo} Equipo
-   */
-  /*   async delete(equipo) {
-      console.log("delete en Service");
-    return this.clubRepository.delete(equipo);
-  } */
+  *
+  * @param {import("../repository/json/equipoRepository")} equipoRepository
+  */
+  async save(equipo) {
+    if (equipo === undefined) {
+      throw new Error("Equipo no definido");
+    }
+    return this.repository.save(equipo);
+  }
 
   async getById(id) {
-    /* if (id === undefined) {
-      throw new ClubIdNotDefinedError();
+    if (id === undefined) {
+      throw new Error('Identificador de equipo no valido');
     }
- */
-    // return this.clubRepository.getById(id);
-    const e = await equipoRepository.getById(id);
-    return e;
+    return this.repository.getById(id);
   }
 
   async getAll() {
-
-    const equipos = await equipoRepository.getAll();
+    const equipos = await this.repository.getAll();
     return equipos;
   }
 
+  /**
+   * @param {Equipo} Equipo
+   */
   async delete(equipo) {
     if (!(equipo instanceof Equipo)) {
       // throw new ClubNotDefinedError();
-      console.log("ClubNotDefinedError en service");
+      console.log('ClubNotDefinedError en service');
       return;
     }
-    return await equipoRepository.delete(equipo);
+    return this.repository.delete(equipo);
   }
 };
