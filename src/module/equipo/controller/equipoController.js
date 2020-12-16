@@ -47,10 +47,8 @@ router.get('/delete/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const equipoSeleccionado = await equipoService.getById(id);
-    console.log(equipoSeleccionado);
     await equipoService.delete(equipoSeleccionado);
     req.session.messages = [`Se eliminó el equipo con ID : ${id} (${equipoSeleccionado.nombreBreve})`];
-    console.log(req.session.messages);
   } catch (e) {
     req.session.errors = [e.message, e.stack];
   }
@@ -68,18 +66,15 @@ router.post('/form', upload.single('escudoUrl'), async (req, res) => {
       equipo.escudoUrl = `/imagenes/${req.file.filename}`;
     }
     const equipoGuardado = await equipoService.save(equipo);
-    console.log(equipo.id);
     if (equipo.id) {
       req.session.messages = [`El equipo con id ${equipo.id} se actualizó exitosamente`];
     } else {
       req.session.messages = [`Se creó el equipo con id ${equipoGuardado.id} (${equipoGuardado.nombreBreve})`];
     }
-    console.log(req.session.messages);
-    res.redirect('/');
   } catch (e) {
     req.session.errors = [e.message, e.stack];
-    // res.redirect('/club');
   }
+  res.redirect('/');
 });
 
 module.exports = router;
