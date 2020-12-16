@@ -45,7 +45,25 @@ test('Consultar un equipo por id llama al método get del repositorio 1 vez', ()
   expect(mockGetById).toHaveBeenCalledTimes(1);
 });
 
+
 /* 
+it('Método save sin ID Equipo Crea un equipo', () => {
+  const service = new EquipoService();
+  service.save({});
+  const mockRepo = EquipoRepository.mock.instances[0];
+  const mockCreate = mockRepo.create;
+  expect(mockCreate).toHaveBeenCalledTimes(1);
+});
+
+
+it('Método save con ID Equipo Actualiza un equipo', () => {
+  const service = new EquipoService();
+  service.save({ id: 43, nombre: 'test' });
+  const mockRepo = EquipoRepository.mock.instances[0];
+  const mockUpdate = mockRepo.update;
+  expect(mockUpdate).toHaveBeenCalledTimes(1);
+});
+
 test('Llamar a guardar un equipo sin pasar un equipo da un error específico', async () => {
   await expect(service.save).rejects.toThrowError(ClubNotDefinedError);
 });

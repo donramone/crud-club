@@ -3,6 +3,19 @@
 
    <script type="text/x-handlebars-template" id="tableTemplate"></script>
    <a style="text-decoration:none" href="/form"><b>Agregar</b></a>
+   
+   {{#if errors}}
+     <div style="background-color:red">
+        <p>{{error}}</p>
+    </div>
+   {{/if}}
+
+   {{#if messages}}
+    <div style="background-color:green">
+        <p>{{messages}}</p>
+    </div>
+   {{/if}}
+
    {{#if equipos}}
 
         <table>

@@ -34,8 +34,8 @@ module.exports = class EquipoRepository {
   }
 
   async save(equipo) {
-    const nuevaLista = equipo.id ? await this.update(equipo) : await this.create(equipo);
-    this.saveData(nuevaLista);
+    const equipoGuardado = equipo.id ? await this.update(equipo) : await this.create(equipo);
+    return equipoGuardado;
   }
 
   async update(equipo) {
@@ -46,19 +46,22 @@ module.exports = class EquipoRepository {
       return false;
     }
     // TODO: Si estoy intentando actualizar un equipo sin escudo da error
-    const oldClub = listaEquipos[equipoIndex];
+    const equipoSinModificar = listaEquipos[equipoIndex];
     if (!equipo.escudoUrl) {
-      listaEquipos[equipoIndex].escudoUrl = oldClub.escudoUrl;
+      listaEquipos[equipoIndex].escudoUrl = equipoSinModificar.escudoUrl;
     }
     listaEquipos[equipoIndex] = EquipoMapper.fromEntityToJson(equipo);
-    return listaEquipos;
+    this.saveData(listaEquipos);
+    return equipo;
   }
 
   async create(equipo) {
     const listaEquipos = await this.getData();
     const equipoToSave = { ...EquipoMapper.fromEntityToJson(equipo), ...{ id: uuidv4() } };
     listaEquipos.push(equipoToSave);
-    return listaEquipos;
+    this.saveData(listaEquipos);
+    return EquipoMapper.fromJsonToEntity(equipoToSave);
+    // return listaEquipos;
   }
 
   async delete(equipo) {
