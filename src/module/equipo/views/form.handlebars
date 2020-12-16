@@ -1,0 +1,41 @@
+
+{{> header}}
+
+<img src="{{equipo.escudoUrl}}" width="75" height="75" />
+<form method="POST" action="/form" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="{{equipo.id}}" readonly />
+    <label for="escudoUrl">Imagen:</label>
+    <input type="file" name="escudoUrl">
+    <br>
+    <label for="nombre">Nombre Completo:</label>
+    <input type="text" name="nombre" value="{{equipo.nombre}}">
+    <br>
+    <label for="nombreBreve">Nombre Abreviado: </label>
+    <input type="text" name="nombreBreve" value="{{equipo.nombreBreve}}" required>
+    <br>
+    <label for="siglas">Siglas:</label>
+    <input type="text" name="siglas"  value="{{equipo.siglas}}" maxlength="3" placeholder="Max de 3 caracteres">
+    <br>
+    <label for="direccion">Dirección: </label>
+    <input type="text" name="direccion" value="{{equipo.direccion}}">
+    <br>
+    <label for="telefono">Telefono: </label>
+    <input type="text" name="telefono" value="{{equipo.telefono}}">
+    <br>
+    <label for="web">Sitio Web: </label>
+    <input type="text" name="web" value="{{equipo.web}}">
+    <br>
+    <label for="email">e-Mail: </label>
+    <input type="text" name="email" value="{{equipo.email}}">
+    <br> 
+    <label for="fundado"> Fundado: </label>
+    <input type="text" name="fundado" value="{{equipo.fundado}}">
+    <br>
+    <label for="sede"> Sede: </label>
+    <input type="text" name="sede" value="{{equipo.sede}}">
+    <br>
+    <div>
+      <button type="submit" name="guardar">Guardar</button>
+      <a href="/">Volver</a>
+    </div>
+</form>
