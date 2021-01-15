@@ -62,6 +62,38 @@ function fromJsonToEntity(data) {
   //  Area: new Area({ id: Number(area_id) }),
   });
 }
+function fromDbToEntity(data) {
+  const {
+    id,
+    name: nombre,
+    short_name: nombreBreve,
+    tla: siglas,
+    crest_url: escudoUrl,
+    address: direccion,
+    phone: telefono,
+    website: web,
+    email,
+    founded: fundado,
+    club_colors: coloresEquipo,
+    venue: sede,
+    // Area: new Area({ id: Number(area_id) }),
+  } = data;
+  return new Equipo({
+    id,
+    nombre,
+    nombreBreve,
+    siglas,
+    escudoUrl,
+    direccion,
+    telefono,
+    web,
+    email,
+    fundado,
+    coloresEquipo,
+    sede,
+  //  Area: new Area({ id: Number(area_id) }),
+  });
+}
 function fromEntityToJson(data) {
   const {
     id,
@@ -98,5 +130,6 @@ function fromEntityToJson(data) {
 module.exports = {
   fromJsonToEntity,
   fromDataToEntity,
+  fromDbToEntity,
   fromEntityToJson,
 };

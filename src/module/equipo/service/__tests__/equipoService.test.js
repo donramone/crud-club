@@ -1,8 +1,9 @@
 const Equipo = require('../../entity/Equipo');
 const EquipoService = require('../equipoService');
-const EquipoRepository = require ('../../repository/json/equipoRepository');
+// const EquipoRepository = require('../../repository/json/equipoRepository');
+const EquipoRepository = require('../../repository/sqlite/equipoRepository');
 
-jest.mock('../../repository/json/equipoRepository');
+jest.mock('../../repository/sqlite/equipoRepository');
 
 beforeEach(() => {
   EquipoRepository.mockClear();
