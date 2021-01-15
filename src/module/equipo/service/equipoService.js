@@ -1,4 +1,5 @@
-const EquipoRepository = require('../repository/json/equipoRepository');
+// const EquipoRepository = require('../repository/json/equipoRepository');
+const EquipoRepository = require('../repository/sqlite/equipoRepository');
 const Equipo = require('../entity/Equipo');
 
 module.exports = class Service {
