@@ -2,7 +2,6 @@ const { Sequelize, Model, DataTypes } = require('sequelize');
 const path = require('path');
 
 const dirPath = path.join(__dirname, '../../../../data/');
-console.log(`${dirPath}equipos.db`)
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: `${dirPath}equipos.db`,
