@@ -1,4 +1,41 @@
-const express = require('express');
+module.exports = class EquipoController {
+  constructor(equipoService) {
+    this.equipoService = equipoService;
+  }
+
+  configureRoutes(app) {
+    app.get('/', (req, res) => {
+      const errors = null;
+      const messages = null;
+      // const { errors, messages } = req.session;
+      const equipos = this.equipoService.getAll();
+      equipos.then((data) => {
+        res.render('index', {
+          equipos: data, messages, errors,
+        });
+      });
+    });
+  }
+}
+
+// };
+
+/*   configureRoutes(app) {
+    const ROUTE = this.ROUTE_BASE;
+  
+    // Nota: el `bind` es necesario porque estamos atando el callback a una función miembro de esta clase
+    // y no a la clase en si.
+    // Al hacer `bind` nos aseguramos que "this" dentro de `create` sea el controlador.
+    app.get(`${ROUTE}/create`, this.create.bind(this));
+    app.get(`${ROUTE}`, this.index.bind(this));
+    app.get(`${ROUTE}/view/:id`, this.view.bind(this));
+    app.post(`${ROUTE}/save`, this.uploadMiddleware.single('crest-url'), this.save.bind(this));
+    app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
+  } */
+
+
+
+/* const express = require('express');
 
 const router = express.Router();
 const multer = require('multer');
@@ -78,3 +115,4 @@ router.post('/form', upload.single('escudoUrl'), async (req, res) => {
 });
 
 module.exports = router;
+ */

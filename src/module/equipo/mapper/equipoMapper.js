@@ -1,5 +1,4 @@
 const Equipo = require('../entity/Equipo');
-// const Area = require('../../area/entity/area');
 
 function fromDataToEntity({
   id,
