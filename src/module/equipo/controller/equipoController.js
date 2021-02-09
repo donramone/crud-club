@@ -5,15 +5,27 @@ module.exports = class EquipoController {
 
   configureRoutes(app) {
     app.get('/', (req, res) => {
-      const errors = null;
-      const messages = null;
-      // const { errors, messages } = req.session;
+      const { errors, messages } = req.session;
       const equipos = this.equipoService.getAll();
       equipos.then((data) => {
         res.render('index', {
           equipos: data, messages, errors,
         });
       });
+      req.session.errors = [];
+      req.session.messages = [];
+    });
+
+    app.get('/delete/:id', async (req, res) => {
+      try {
+        const { id } = req.params;
+        const equipoSeleccionado = await this.equipoService.getById(id);
+        await this.equipoService.delete(equipoSeleccionado);
+        req.session.messages = [`Se eliminó el equipo con ID : ${id} (${equipoSeleccionado.nombreBreve})`];
+      } catch (e) {
+        req.session.errors = [e.message, e.stack];
+      }
+      res.redirect('/');
     });
   }
 }

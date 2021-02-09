@@ -16,6 +16,7 @@ app.engine('handlebars', exphbs({
 }));
 
 const container = configureDependencyInjection();
+app.use(container.get('Session'));
 try {
   initEquipoModule(app, container);
 } catch (error) {
@@ -23,7 +24,7 @@ try {
   console.log(error);
 }
 
-// app.use(container.get('Session'));
+
 // const equipoController = container.get('EquipoController');
 // app.get('/', equipoController.index.bind(equipoController));
 
