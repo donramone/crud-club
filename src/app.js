@@ -4,6 +4,7 @@ const path = require('path');
 const express = require('express');
 const exphbs = require('express-handlebars');
 const { init: initEquipoModule } = require('./module/equipo/module');
+
 const configureDependencyInjection = require('./config/di');
 
 const app = express();
@@ -17,19 +18,12 @@ app.engine('handlebars', exphbs({
 
 const container = configureDependencyInjection();
 app.use(container.get('Session'));
-try {
-  initEquipoModule(app, container);
-} catch (error) {
-  console.log(" *********************ERROR*************************");
-  console.log(error);
-}
-
-
-// const equipoController = container.get('EquipoController');
-// app.get('/', equipoController.index.bind(equipoController));
 
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'module/equipo/views'));
-// app.use(require('../src/module/equipo/controller/equipoController'));
+initEquipoModule(app, container);
+
+// const equipoController = container.get('EquipoController');
+// app.get('/', equipoController.index.bind(equipoController));
 
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));

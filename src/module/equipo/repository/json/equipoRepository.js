@@ -1,3 +1,5 @@
+// ESTE MODULO QUEDA A MODO DE APRENDIZAJE, NO ESTA SIENDO UTILIZADO
+/*
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
@@ -82,3 +84,4 @@ module.exports = class EquipoRepository {
     fs.writeFileSync(ruta, JSON.stringify(content));
   }
 };
+*/

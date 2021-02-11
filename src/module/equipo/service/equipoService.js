@@ -1,15 +1,10 @@
-const EquipoRepository = require('../repository/sequelize/equipoRepository');
 const Equipo = require('../entity/Equipo');
 
 module.exports = class Service {
-  constructor() {
-    this.repository = new EquipoRepository();
+  constructor(repository) {
+    this.repository = repository;
   }
 
-  /**
-  *
-  * @param {import("../repository/json/equipoRepository")} equipoRepository
-  */
   async save(equipo) {
     if (equipo === undefined) {
       throw new Error("Equipo no definido");
@@ -29,9 +24,6 @@ module.exports = class Service {
     return equipos;
   }
 
-  /**
-   * @param {Equipo} Equipo
-   */
   async delete(equipo) {
     if (!(equipo instanceof Equipo)) {
       // throw new ClubNotDefinedError();

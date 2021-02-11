@@ -1,3 +1,4 @@
+/* ESTE MODULO QUEDA A MODO DE APRENDIZAJE, NO ESTA SIENDO UTILIZADO
 const path = require('path');
 
 const dirPath = path.join(__dirname, '../../../../../data/');
@@ -122,7 +123,6 @@ module.exports = class EquipoRepository {
       equipo.coloresEquipo,
       equipo.sede,
       null,
-      
     );
 
     id = result.lastInsertRowid;
@@ -140,3 +140,4 @@ module.exports = class EquipoRepository {
     return true;
   }
 };
+*/

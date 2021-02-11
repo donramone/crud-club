@@ -1,17 +1,17 @@
-
-const EquipoModel = require('../../model/equipoModel');
 const EquipoMapper = require('../../mapper/equipoMapper');
 
 module.exports = class EquipoRepository {
-   constructor() {
-    // this.databaseAdapter = dbAdapter || db;
+  constructor(equipoModel) {
+    this.equipoModel = equipoModel;
   }
-   async getAll(){
-    const equipos = await EquipoModel.findAll();
+
+  async getAll() {
+    const equipos = await this.equipoModel.findAll();
     return equipos.map((equipoData) => EquipoMapper.fromDbToEntity(equipoData));
   }
+
   async getById(id) {
-    const equipo = await EquipoModel.findByPk(id);
+    const equipo = await this.equipoModel.findByPk(id);
     return EquipoMapper.fromDbToEntity(equipo);
   }
 
@@ -19,13 +19,13 @@ module.exports = class EquipoRepository {
     if (!equipo || !equipo.id) {
       console.log('No existe el equipo');
     }
-    return Boolean(await EquipoModel.destroy({ where: { id: equipo.id } }));
+    return Boolean(await this.equipoModel.destroy({ where: { id: equipo.id } }));
   }
-  
-  async save(equipo){
-  let equipoToSave;
-  const buildOptions = { isNewRecord: !equipo.id};
-  equipoToSave = EquipoModel.build(EquipoMapper.fromEntityToModel(equipo),buildOptions);
+
+  async save(equipo) {
+    let equipoToSave;
+    const buildOptions = { isNewRecord: !equipo.id };
+    equipoToSave = this.equipoModel.build(EquipoMapper.fromEntityToModel(equipo), buildOptions);
     try {
       await equipoToSave.save();
       return EquipoMapper.fromDbToEntity(equipoToSave);
@@ -33,4 +33,4 @@ module.exports = class EquipoRepository {
       console.log(error);
     }
   }
-}
+};

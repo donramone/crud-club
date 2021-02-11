@@ -1,12 +1,12 @@
 const EquipoController = require('./controller/equipoController');
-const EquipoRepository = require('./repository/sqlite/equipoRepository');
+const EquipoRepository = require('./repository/sequelize/equipoRepository');
 const EquipoService = require('./service/equipoService');
 const EquipoModel = require('./model/equipoModel');
 
 function init(app, container) {
   const controller = container.get('EquipoController');
-  console.log(controller);
- controller.configureRoutes(app);
+  // TODO implementar el configureRoutes
+  controller.configureRoutes(app);
 }
 
 module.exports = {
